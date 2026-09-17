@@ -22,6 +22,17 @@ public class Candidatura
     //candidatura tem uma coleçao de historico. 1:N
     public ICollection<HistoricoContato> HistoricosContato { get; private set; } = new List<HistoricoContato>();
 
+    // FK Curriculo
+    public Guid CurriculoId { get; private set; }
+
+    // navegação: uma candidatura aponta para um currículo
+    public Curriculo? Curriculo { get; private set; }
+
+
+
+
+
+
     public Candidatura(string empresa, string cargo, decimal? pretensaoSalarial, string? linkVaga, StatusEnum status)
     {
         ValidateDomain(empresa, cargo, pretensaoSalarial, linkVaga, status);

@@ -20,6 +20,9 @@ public class HistoricoContato
     public Candidatura? Candidatura { get; private set; }
 
 
+
+
+
     public HistoricoContato(DateTime dataContato, TipoContatoEnum tipoContato, string descricao, Guid candidaturaId)
     {
         ValidateDomain(dataContato, tipoContato, descricao, candidaturaId);

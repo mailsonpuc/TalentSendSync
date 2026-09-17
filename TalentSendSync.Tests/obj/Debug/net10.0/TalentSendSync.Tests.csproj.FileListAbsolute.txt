@@ -97,3 +97,4 @@
 /home/mailson/TalentSendSync/TalentSendSync.Tests/obj/Debug/net10.0/TalentSendSync.Tests.pdb
 /home/mailson/TalentSendSync/TalentSendSync.Tests/obj/Debug/net10.0/TalentSendSync.Tests.genruntimeconfig.cache
 /home/mailson/TalentSendSync/TalentSendSync.Tests/obj/Debug/net10.0/ref/TalentSendSync.Tests.dll
+/home/mailson/TalentSendSync/TalentSendSync.Tests/obj/Debug/net10.0/TalentSendSync.Tests.sourcelink.json

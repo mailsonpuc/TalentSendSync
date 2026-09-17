@@ -9,3 +9,4 @@
 /home/mailson/TalentSendSync/TalentSendSync.Domain/obj/Debug/net10.0/refint/TalentSendSync.Domain.dll
 /home/mailson/TalentSendSync/TalentSendSync.Domain/obj/Debug/net10.0/TalentSendSync.Domain.pdb
 /home/mailson/TalentSendSync/TalentSendSync.Domain/obj/Debug/net10.0/ref/TalentSendSync.Domain.dll
+/home/mailson/TalentSendSync/TalentSendSync.Domain/obj/Debug/net10.0/TalentSendSync.Domain.sourcelink.json

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TalentSendSync.Domain/TalentSendSync.Domain.csproj" />
+  <Project Path="TalentSendSync.Tests/TalentSendSync.Tests.csproj" />
+</Solution>

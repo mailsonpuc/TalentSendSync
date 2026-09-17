@@ -1,0 +1,1 @@
+uma candidatura pode ter vários registros de histórico, e cada HistoricoContato pertence a uma única candidatura.

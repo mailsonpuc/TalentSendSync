@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TalentSendSync.Domain\TalentSendSync.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

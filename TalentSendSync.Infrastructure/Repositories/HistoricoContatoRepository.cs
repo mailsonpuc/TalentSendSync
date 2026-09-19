@@ -26,9 +26,9 @@ public class HistoricoContatoRepository : IHistoricoContatoRepository
         return historicoContato;
     }
 
-    public async Task<HistoricoContato?> GetByIdAsync(int? id)
+    public async Task<HistoricoContato?> GetByIdAsync(Guid? id)
     {
-        if (!id.HasValue || id.Value <= 0)
+        if (!id.HasValue || id.Value == Guid.Empty)
             return null;
 
         return await _context.HistoricosContato

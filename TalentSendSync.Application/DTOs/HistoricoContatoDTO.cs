@@ -4,7 +4,7 @@ namespace TalentSendSync.Application.DTOs;
 
 public class HistoricoContatoDTO
 {
-    public int HistoricoContatoId { get; set; }
+    public Guid HistoricoContatoId { get; set; }
 
     public DateTime DataContato { get; set; }
 

@@ -4,7 +4,7 @@ namespace TalentSendSync.Domain.Entities;
 
 public class HistoricoContato
 {
-    public int HistoricoContatoId { get; private set; }
+    public Guid HistoricoContatoId { get; private set; }
 
     public DateTime DataContato { get; private set; }
 
@@ -27,6 +27,7 @@ public class HistoricoContato
     {
         ValidateDomain(dataContato, tipoContato, descricao, candidaturaId);
 
+        HistoricoContatoId = Guid.NewGuid();
         DataContato = dataContato;
         TipoContato = tipoContato;
         Descricao = descricao.Trim();

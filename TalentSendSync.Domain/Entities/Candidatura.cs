@@ -28,11 +28,6 @@ public class Candidatura
     // navegação: uma candidatura aponta para um currículo
     public Curriculo? Curriculo { get; private set; }
 
-
-
-
-
-
     public Candidatura(string empresa, string cargo, decimal? pretensaoSalarial, string? linkVaga, StatusEnum status)
     {
         ValidateDomain(empresa, cargo, pretensaoSalarial, linkVaga, status);
@@ -41,6 +36,42 @@ public class Candidatura
         Empresa = empresa.Trim();
         Cargo = cargo.Trim();
         DataEnvio = DateTime.UtcNow;
+        PretensaoSalarial = pretensaoSalarial;
+        LinkVaga = linkVaga?.Trim();
+        Status = status;
+    }
+
+
+
+
+
+    public Candidatura(
+        string empresa,
+        string cargo,
+        decimal? pretensaoSalarial,
+        string? linkVaga,
+        StatusEnum status,
+        Guid curriculoId)
+    {
+        ValidateDomain(empresa, cargo, pretensaoSalarial, linkVaga, status);
+        ValidateCurriculoId(curriculoId);
+
+        CandidaturaId = Guid.NewGuid();
+        Empresa = empresa.Trim();
+        Cargo = cargo.Trim();
+        DataEnvio = DateTime.UtcNow;
+        PretensaoSalarial = pretensaoSalarial;
+        LinkVaga = linkVaga?.Trim();
+        Status = status;
+        CurriculoId = curriculoId;
+    }
+
+    public void UpdateDetails(string empresa, string cargo, decimal? pretensaoSalarial, string? linkVaga, StatusEnum status)
+    {
+        ValidateDomain(empresa, cargo, pretensaoSalarial, linkVaga, status);
+
+        Empresa = empresa.Trim();
+        Cargo = cargo.Trim();
         PretensaoSalarial = pretensaoSalarial;
         LinkVaga = linkVaga?.Trim();
         Status = status;
@@ -90,5 +121,11 @@ public class Candidatura
                 "Status da candidatura inválido.",
                 nameof(status));
         }
+    }
+
+    private static void ValidateCurriculoId(Guid curriculoId)
+    {
+        if (curriculoId == Guid.Empty)
+            throw new ArgumentException("O currículo é obrigatório.", nameof(curriculoId));
     }
 }

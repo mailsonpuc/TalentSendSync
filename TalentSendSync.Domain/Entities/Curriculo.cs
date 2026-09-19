@@ -40,6 +40,16 @@ public class Curriculo
         Ativo = true;
     }
 
+    public void UpdateDetails(string nome, string nomeArquivo, string urlArquivo, int versao)
+    {
+        ValidateDomain(nome, nomeArquivo, urlArquivo, versao);
+
+        Nome = nome.Trim();
+        NomeArquivo = nomeArquivo.Trim();
+        UrlArquivo = urlArquivo.Trim();
+        Versao = versao;
+    }
+
     private static void ValidateDomain(string nome, string nomeArquivo, string urlArquivo, int versao)
     {
         if (string.IsNullOrWhiteSpace(nome))

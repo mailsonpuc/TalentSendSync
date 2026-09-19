@@ -13,4 +13,6 @@ public class HistoricoContatoDTO
     public string Descricao { get; set; } = string.Empty;
 
     public Guid CandidaturaId { get; set; }
+
+    
 }

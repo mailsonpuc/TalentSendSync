@@ -34,6 +34,20 @@ public class HistoricoContato
         CandidaturaId = candidaturaId;
     }
 
+    public void UpdateDetails(
+        DateTime dataContato,
+        TipoContatoEnum tipoContato,
+        string descricao,
+        Guid candidaturaId)
+    {
+        ValidateDomain(dataContato, tipoContato, descricao, candidaturaId);
+
+        DataContato = dataContato;
+        TipoContato = tipoContato;
+        Descricao = descricao.Trim();
+        CandidaturaId = candidaturaId;
+    }
+
 
     private static void ValidateDomain(DateTime dataContato, TipoContatoEnum tipoContato, string descricao, Guid candidaturaId)
     {

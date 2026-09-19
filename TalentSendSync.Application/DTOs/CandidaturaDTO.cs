@@ -1,3 +1,4 @@
+using TalentSendSync.Domain.Entities;
 using TalentSendSync.Domain.Enums;
 
 namespace TalentSendSync.Application.DTOs;
@@ -17,5 +18,12 @@ public class CandidaturaDTO
     public string? LinkVaga { get; set; }
 
     public StatusEnum Status { get; set; }
+
+
+
+    // FK Curriculo
+    public Guid CurriculoId { get; set; }
+    // navegação: uma candidatura aponta para um currículo
+    //public Curriculo? Curriculo { get; private set; }
 
 }

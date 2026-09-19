@@ -1,3 +1,4 @@
+using TalentSendSync.CrossCutting;
 using TalentSendSync.CrossCutting.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddInfrastructureAPI(builder.Configuration);
+// Swagger
+builder.Services.AddInfrastructureSwagger(builder.Configuration);
 
 
 
@@ -18,7 +21,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseOpenApi();
+
+    app.UseSwaggerUi(options =>
+    {
+        options.Path = "";
+    });
 }
 
 app.UseHttpsRedirection();

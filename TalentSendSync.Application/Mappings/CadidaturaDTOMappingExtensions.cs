@@ -19,6 +19,7 @@ public static class CadidaturaDTOMappingExtensions
             PretensaoSalarial = candidatura.PretensaoSalarial,
             LinkVaga = candidatura.LinkVaga,
             Status = candidatura.Status,
+            CurriculoId = candidatura.CurriculoId,
             DataEnvio = candidatura.DataEnvio
         };
     }
@@ -33,7 +34,8 @@ public static class CadidaturaDTOMappingExtensions
             candidaturaDTO.Cargo,
             candidaturaDTO.PretensaoSalarial,
             candidaturaDTO.LinkVaga,
-            candidaturaDTO.Status);
+            candidaturaDTO.Status,
+            candidaturaDTO.CurriculoId);
     }
 
     public static IEnumerable<CandidaturaDTO> ToCandidaturaDTOList(this IEnumerable<Candidatura> candidaturas)

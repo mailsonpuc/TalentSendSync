@@ -43,7 +43,7 @@ public class HistoricoContatoController : ControllerBase
 	[HttpPost]
 	[ProducesResponseType(typeof(HistoricoContatoDTO), StatusCodes.Status201Created)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
-	public async Task<ActionResult<HistoricoContatoDTO>> Create([FromBody] HistoricoContatoDTO historicoContato)
+	public async Task<ActionResult<HistoricoContatoDTO>> Create([FromBody] HistoricoContatoCreateDTO historicoContato)
 	{
 		if (await _unitOfWork.CandidaturaRepository.GetByIdAsync(historicoContato.CandidaturaId) is null)
 			return NotFound("Candidatura não encontrada.");

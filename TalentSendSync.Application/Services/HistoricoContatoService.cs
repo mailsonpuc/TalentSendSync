@@ -40,7 +40,7 @@ public class HistoricoContatoService : IHistoricoContatoService
         return historico?.ToHistoricoContatoDTO();
     }
 
-    public async Task<HistoricoContatoDTO> CreateAsync(HistoricoContatoDTO historicoContato)
+    public async Task<HistoricoContatoDTO> CreateAsync(HistoricoContatoCreateDTO historicoContato)
     {
         ArgumentNullException.ThrowIfNull(historicoContato);
         await EnsureCandidaturaExistsAsync(historicoContato.CandidaturaId);

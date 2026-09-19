@@ -32,8 +32,9 @@ public class HistoricoContatoRepository : IHistoricoContatoRepository
             return null;
 
         return await _context.HistoricosContato
-            .AsNoTracking()
+            .AsTracking()
             .Include(historico => historico.Candidatura)
+                .ThenInclude(candidatura => candidatura!.Curriculo)
             .FirstOrDefaultAsync(historico => historico.HistoricoContatoId == id.Value);
     }
 
@@ -42,8 +43,9 @@ public class HistoricoContatoRepository : IHistoricoContatoRepository
         ValidatePagination(pageNumber, pageSize);
 
         var query = _context.HistoricosContato
-            .AsNoTracking()
+            .AsTracking()
             .Include(historico => historico.Candidatura)
+                .ThenInclude(candidatura => candidatura!.Curriculo)
             .OrderByDescending(historico => historico.DataContato);
 
         return await PagedList<HistoricoContato>.ToPagedListAsync(query, pageNumber, pageSize);

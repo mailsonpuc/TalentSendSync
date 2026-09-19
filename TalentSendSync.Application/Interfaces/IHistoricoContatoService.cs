@@ -7,7 +7,7 @@ public interface IHistoricoContatoService
 {
     Task<PagedList<HistoricoContatoDTO>> GetHistoricosPagedAsync(int pageNumber, int pageSize);
     Task<HistoricoContatoDTO?> GetByIdAsync(Guid? id);
-    Task<HistoricoContatoDTO> CreateAsync(HistoricoContatoDTO historicoContato);
+    Task<HistoricoContatoDTO> CreateAsync(HistoricoContatoCreateDTO historicoContato);
     Task<HistoricoContatoDTO> UpdateAsync(HistoricoContatoDTO historicoContato);
     Task<HistoricoContatoDTO> RemoveAsync(HistoricoContatoDTO historicoContato);
 }

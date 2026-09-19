@@ -17,7 +17,31 @@ public static class HistoricoContatoDTOMappingExtensions
 			DataContato = historicoContato.DataContato,
 			TipoContato = historicoContato.TipoContato,
 			Descricao = historicoContato.Descricao,
-			CandidaturaId = historicoContato.CandidaturaId
+			CandidaturaId = historicoContato.CandidaturaId,
+			Candidatura = historicoContato.Candidatura is null
+				? null
+				: new CandidaturaHistoricoDTO
+				{
+					CandidaturaId = historicoContato.Candidatura.CandidaturaId,
+					Empresa = historicoContato.Candidatura.Empresa,
+					Cargo = historicoContato.Candidatura.Cargo,
+					DataEnvio = historicoContato.Candidatura.DataEnvio,
+					PretensaoSalarial = historicoContato.Candidatura.PretensaoSalarial,
+					LinkVaga = historicoContato.Candidatura.LinkVaga,
+					Status = historicoContato.Candidatura.Status,
+					CurriculoId = historicoContato.Candidatura.CurriculoId,
+					Curriculo = historicoContato.Candidatura.Curriculo?.ToCurriculoDTO(),
+					HistoricosContato = historicoContato.Candidatura.HistoricosContato
+						.Select(contato => new HistoricoContatoResumoDTO
+						{
+							HistoricoContatoId = contato.HistoricoContatoId,
+							DataContato = contato.DataContato,
+							TipoContato = contato.TipoContato,
+							Descricao = contato.Descricao,
+							CandidaturaId = contato.CandidaturaId
+						})
+						.ToList()
+				}
 		};
 	}
 
@@ -29,6 +53,19 @@ public static class HistoricoContatoDTOMappingExtensions
 		return new HistoricoContato(
 			historicoContatoDTO.DataContato,
 			historicoContatoDTO.TipoContato,
+			historicoContatoDTO.Descricao,
+			historicoContatoDTO.CandidaturaId);
+	}
+
+	public static HistoricoContato? ToHistoricoContato(this HistoricoContatoCreateDTO historicoContatoDTO)
+	{
+		if (historicoContatoDTO is null)
+			return null;
+
+		return new HistoricoContato(
+			historicoContatoDTO.DataContato,
+			historicoContatoDTO.TipoContato,
+
 			historicoContatoDTO.Descricao,
 			historicoContatoDTO.CandidaturaId);
 	}

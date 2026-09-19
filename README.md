@@ -26,3 +26,21 @@ Histórico de Contato
 ```
 
 Dessa forma, o sistema mantém o histórico das candidaturas e permite saber qual currículo foi utilizado em cada candidatura.
+
+---
+
+## aplicar migration
+
+```bash
+dotnet ef migrations add V1 \
+  --project TalentSendSync.Infrastructure \
+  --startup-project TalentSendSync.API \
+  --output-dir Migrations
+```
+
+## atualiza banco
+```bash
+dotnet ef database update \
+  --project TalentSendSync.Infrastructure \
+  --startup-project TalentSendSync.API
+```

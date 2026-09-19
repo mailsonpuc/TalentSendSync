@@ -1,0 +1,42 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TalentSendSync.Domain.Entities;
+
+namespace TalentSendSync.Infrastructure.EntitiesConfiguration;
+
+public class CurriculoConfiguration : IEntityTypeConfiguration<Curriculo>
+{
+    public void Configure(EntityTypeBuilder<Curriculo> builder)
+    {
+        builder.ToTable("Curriculos");
+
+        builder.HasKey(curriculo => curriculo.CurriculoId);
+
+        builder.Property(curriculo => curriculo.Nome)
+            .IsRequired()
+            .HasMaxLength(150);
+
+        builder.Property(curriculo => curriculo.NomeArquivo)
+            .IsRequired()
+            .HasMaxLength(255);
+
+        builder.Property(curriculo => curriculo.UrlArquivo)
+            .IsRequired()
+            .HasMaxLength(500);
+
+        builder.Property(curriculo => curriculo.Versao)
+            .IsRequired();
+
+        builder.Property(curriculo => curriculo.DataCriacao)
+            .IsRequired();
+
+        builder.Property(curriculo => curriculo.Ativo)
+            .IsRequired();
+
+        builder.HasMany(curriculo => curriculo.Candidaturas)
+            .WithOne(candidatura => candidatura.Curriculo)
+            .HasForeignKey(candidatura => candidatura.CurriculoId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+    
+}

@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TalentSendSync.Domain.Interfaces;
 using TalentSendSync.Infrastructure.Context;
+using TalentSendSync.Infrastructure.Repositories;
 
 namespace TalentSendSync.CrossCutting.IoC;
 
@@ -24,9 +26,15 @@ public static class DependencyInjectionAPI
                 b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)
             )
         );
-        
+
+
+
+        //Unit Of World
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
         return services;
-        
+
     }
-    
+
 }

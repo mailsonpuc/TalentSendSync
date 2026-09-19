@@ -6,7 +6,7 @@ namespace TalentSendSync.Domain.Interfaces;
 public interface IHistoricoContatoRepository
 {
     Task<PagedList<HistoricoContato>> GetHistoricosPagedAsync(int pageNumber, int pageSize);
-    Task<HistoricoContato?> GetByIdAsync(Guid? id);
+    Task<HistoricoContato?> GetByIdAsync(int? id);
     Task<HistoricoContato> CreateAsync(HistoricoContato historicoContato);
     Task<HistoricoContato> UpdateAsync(HistoricoContato historicoContato);
     Task<HistoricoContato> RemoveAsync(HistoricoContato historicoContato);

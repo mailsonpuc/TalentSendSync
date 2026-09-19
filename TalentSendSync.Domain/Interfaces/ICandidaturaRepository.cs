@@ -5,7 +5,7 @@ namespace TalentSendSync.Domain.Interfaces;
 
 public interface ICandidaturaRepository
 {
-    //Task<IEnumerable<Candidatura>> GetCandidaturasAsync();
+    Task<IQueryable<Candidatura>> GetCandidaturasAsync(); 
     Task<PagedList<Candidatura>> GetCandidaturasPagedAsync(int pageNumber, int pageSize);
     Task<Candidatura?> GetByIdAsync(Guid? id);
     Task<Candidatura> CreateAsync(Candidatura candidatura);

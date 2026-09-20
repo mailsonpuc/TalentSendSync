@@ -37,7 +37,7 @@ public class HistoricoContatoController : ControllerBase
 	public async Task<ActionResult<HistoricoContatoDTO>> GetById(Guid id)
 	{
 		var historico = await _historicoContatoService.GetByIdAsync(id);
-		return historico is null ? NotFound() : Ok(historico);
+		return historico is null ? NotFound(new {message = "Nada encontrado"}) : Ok(historico);
 	}
 
 	[HttpPost]

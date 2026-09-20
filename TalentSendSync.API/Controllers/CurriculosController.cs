@@ -40,7 +40,9 @@ public class CurriculosController : ControllerBase
     public async Task<ActionResult<CurriculoDTO>> GetById(Guid id)
     {
         var curriculo = await _curriculoService.GetByIdAsync(id);
-        return curriculo is null ? NotFound() : Ok(curriculo);
+        return curriculo is null
+            ? NotFound(new { message = "Currículo não encontrado." })
+            : Ok(curriculo);
     }
 
     [HttpPost]

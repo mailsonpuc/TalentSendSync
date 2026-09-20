@@ -43,7 +43,8 @@ public class CandidaturasController : ControllerBase
 	public async Task<ActionResult<CandidaturaDTO>> GetById(Guid id)
 	{
 		var candidatura = await _candidaturaService.GetByIdAsync(id);
-		return candidatura is null ? NotFound() : Ok(candidatura);
+
+		return candidatura is null ? NotFound(new {message = "Nada encontrado"}) : Ok(candidatura);
 	}
 
 	[HttpPost]

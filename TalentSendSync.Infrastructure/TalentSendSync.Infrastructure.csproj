@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TalentSendSync.Domain\TalentSendSync.Domain.csproj" />
+    <ProjectReference Include="..\TalentSendSync.Application\TalentSendSync.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

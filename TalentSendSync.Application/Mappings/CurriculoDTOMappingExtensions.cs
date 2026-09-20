@@ -15,23 +15,13 @@ public static class CurriculoDTOMappingExtensions
 			CurriculoId = curriculo.CurriculoId,
 			Nome = curriculo.Nome,
 			NomeArquivo = curriculo.NomeArquivo,
-			UrlArquivo = curriculo.UrlArquivo,
+			StorageKey = curriculo.StorageKey,
+			ContentType = curriculo.ContentType,
+			TamanhoBytes = curriculo.TamanhoBytes,
 			Versao = curriculo.Versao,
 			DataCriacao = curriculo.DataCriacao,
 			Ativo = curriculo.Ativo
 		};
-	}
-
-	public static Curriculo? ToCurriculo(this CurriculoDTO curriculoDTO)
-	{
-		if (curriculoDTO is null)
-			return null;
-
-		return new Curriculo(
-			curriculoDTO.Nome,
-			curriculoDTO.NomeArquivo,
-			curriculoDTO.UrlArquivo,
-			curriculoDTO.Versao);
 	}
 
 	public static IEnumerable<CurriculoDTO> ToCurriculoDTOList(this IEnumerable<Curriculo> curriculos)

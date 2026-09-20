@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TalentSendSync.Application.DTOs;
 using TalentSendSync.Application.Interfaces;
 using TalentSendSync.Domain.Interfaces;
+using TalentSendSync.API.Requests;
 
 namespace TalentSendSync.API.Controllers;
 
@@ -10,13 +11,16 @@ namespace TalentSendSync.API.Controllers;
 public class CurriculosController : ControllerBase
 {
     private readonly ICurriculoService _curriculoService;
+    private readonly IArquivoStorage _arquivoStorage;
     private readonly IUnitOfWork _unitOfWork;
 
     public CurriculosController(
         ICurriculoService curriculoService,
+        IArquivoStorage arquivoStorage,
         IUnitOfWork unitOfWork)
     {
         _curriculoService = curriculoService;
+        _arquivoStorage = arquivoStorage;
         _unitOfWork = unitOfWork;
     }
 
@@ -40,13 +44,57 @@ public class CurriculosController : ControllerBase
     }
 
     [HttpPost]
+    [Consumes("multipart/form-data")]
+    [RequestSizeLimit(10 * 1024 * 1024)]
     [ProducesResponseType(typeof(CurriculoDTO), StatusCodes.Status201Created)]
-    public async Task<ActionResult<CurriculoDTO>> Create([FromBody] CurriculoDTO curriculo)
+    public async Task<ActionResult<CurriculoDTO>> Create(
+        [FromForm] CriarCurriculoRequest request)
     {
-        var createdCurriculo = await _curriculoService.CreateAsync(curriculo);
+        if (request.Arquivo is null)
+            return BadRequest("O arquivo PDF é obrigatório.");
+
+        await using var arquivoStream = request.Arquivo.OpenReadStream();
+        CurriculoDTO createdCurriculo;
+        try
+        {
+            createdCurriculo = await _curriculoService.CreateAsync(
+                new CriarCurriculoInput(
+                    request.Nome,
+                    request.Versao,
+                    arquivoStream,
+                    request.Arquivo.FileName,
+                    request.Arquivo.ContentType,
+                    request.Arquivo.Length));
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(exception.Message);
+        }
+
         await _unitOfWork.CommitAsync();
 
         return CreatedAtAction(nameof(GetById), new { id = createdCurriculo.CurriculoId }, createdCurriculo);
+    }
+
+    [HttpGet("{id:guid}/arquivo")]
+    [Produces("application/pdf")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Download(Guid id)
+    {
+        var curriculo = await _curriculoService.GetByIdAsync(id);
+        if (curriculo is null)
+            return NotFound();
+
+        try
+        {
+            var arquivo = await _arquivoStorage.AbrirAsync(curriculo.StorageKey);
+            return File(arquivo, curriculo.ContentType, curriculo.NomeArquivo);
+        }
+        catch (FileNotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     [HttpPut("{id:guid}")]

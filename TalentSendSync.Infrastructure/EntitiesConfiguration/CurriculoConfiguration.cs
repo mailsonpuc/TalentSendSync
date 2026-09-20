@@ -20,9 +20,16 @@ public class CurriculoConfiguration : IEntityTypeConfiguration<Curriculo>
             .IsRequired()
             .HasMaxLength(255);
 
-        builder.Property(curriculo => curriculo.UrlArquivo)
+        builder.Property(curriculo => curriculo.StorageKey)
             .IsRequired()
             .HasMaxLength(500);
+
+        builder.Property(curriculo => curriculo.ContentType)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(curriculo => curriculo.TamanhoBytes)
+            .IsRequired();
 
         builder.Property(curriculo => curriculo.Versao)
             .IsRequired();

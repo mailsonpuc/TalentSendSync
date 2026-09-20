@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using TalentSendSync.Application.Interfaces;
 using TalentSendSync.Application.Services;
 using TalentSendSync.Domain.Interfaces;
 using TalentSendSync.Infrastructure.Context;
 using TalentSendSync.Infrastructure.Repositories;
+using TalentSendSync.Infrastructure.Storage;
 
 namespace TalentSendSync.CrossCutting.IoC;
 
@@ -29,6 +31,11 @@ public static class DependencyInjectionAPI
             )
         );
 
+        services.AddScoped<IArquivoStorage>(serviceProvider =>
+            new LocalFileStorage(serviceProvider
+                .GetRequiredService<IHostEnvironment>()
+                .ContentRootPath));
+
 
 
         //Unit Of World
@@ -43,7 +50,9 @@ public static class DependencyInjectionAPI
         services.AddScoped<ICurriculoService>(serviceProvider =>
         {
             var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-            return new CurriculoService(unitOfWork.CurriculoRepository);
+            return new CurriculoService(
+                unitOfWork.CurriculoRepository,
+                serviceProvider.GetRequiredService<IArquivoStorage>());
         });
         services.AddScoped<IHistoricoContatoService>(serviceProvider =>
         {

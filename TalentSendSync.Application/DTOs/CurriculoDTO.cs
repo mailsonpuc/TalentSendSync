@@ -9,7 +9,11 @@ public class CurriculoDTO
 
     public string NomeArquivo { get; set; } = string.Empty;
 
-    public string UrlArquivo { get; set; } = string.Empty;
+    public string StorageKey { get; set; } = string.Empty;
+
+    public string ContentType { get; set; } = string.Empty;
+
+    public long TamanhoBytes { get; set; }
 
     public int Versao { get; set; }
 

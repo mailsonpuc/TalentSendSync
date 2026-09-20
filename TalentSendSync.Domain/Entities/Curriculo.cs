@@ -8,7 +8,11 @@ public class Curriculo
 
     public string NomeArquivo { get; private set; } = string.Empty;
 
-    public string UrlArquivo { get; private set; } = string.Empty;
+    public string StorageKey { get; private set; } = string.Empty;
+
+    public string ContentType { get; private set; } = string.Empty;
+
+    public long TamanhoBytes { get; private set; }
 
     public int Versao { get; private set; }
 
@@ -27,30 +31,42 @@ public class Curriculo
     {
     }
 
-    public Curriculo(string nome, string nomeArquivo, string urlArquivo, int versao)
+    public Curriculo(
+        string nome,
+        string nomeArquivo,
+        string storageKey,
+        string contentType,
+        long tamanhoBytes,
+        int versao)
     {
-        ValidateDomain(nome, nomeArquivo, urlArquivo, versao);
+        ValidateDomain(nome, nomeArquivo, storageKey, contentType, tamanhoBytes, versao);
 
         CurriculoId = Guid.NewGuid();
         Nome = nome.Trim();
         NomeArquivo = nomeArquivo.Trim();
-        UrlArquivo = urlArquivo.Trim();
+        StorageKey = storageKey.Trim();
+        ContentType = contentType.Trim();
+        TamanhoBytes = tamanhoBytes;
         Versao = versao;
         DataCriacao = DateTime.UtcNow;
         Ativo = true;
     }
 
-    public void UpdateDetails(string nome, string nomeArquivo, string urlArquivo, int versao)
+    public void UpdateDetails(string nome, int versao)
     {
-        ValidateDomain(nome, nomeArquivo, urlArquivo, versao);
+        ValidateDomain(nome, NomeArquivo, StorageKey, ContentType, TamanhoBytes, versao);
 
         Nome = nome.Trim();
-        NomeArquivo = nomeArquivo.Trim();
-        UrlArquivo = urlArquivo.Trim();
         Versao = versao;
     }
 
-    private static void ValidateDomain(string nome, string nomeArquivo, string urlArquivo, int versao)
+    private static void ValidateDomain(
+        string nome,
+        string nomeArquivo,
+        string storageKey,
+        string contentType,
+        long tamanhoBytes,
+        int versao)
     {
         if (string.IsNullOrWhiteSpace(nome))
             throw new ArgumentException(
@@ -72,15 +88,14 @@ public class Curriculo
                 "Nome do arquivo deve possuir no máximo 255 caracteres.",
                 nameof(nomeArquivo));
 
-        if (string.IsNullOrWhiteSpace(urlArquivo))
-            throw new ArgumentException(
-                "URL do arquivo é obrigatória.",
-                nameof(urlArquivo));
+        if (string.IsNullOrWhiteSpace(storageKey))
+            throw new ArgumentException("A chave do arquivo é obrigatória.", nameof(storageKey));
 
-        if (!Uri.IsWellFormedUriString(urlArquivo, UriKind.Absolute))
-            throw new ArgumentException(
-                "URL do arquivo não é válida.",
-                nameof(urlArquivo));
+        if (!string.Equals(contentType, "application/pdf", StringComparison.OrdinalIgnoreCase))
+            throw new ArgumentException("O arquivo deve ser um PDF.", nameof(contentType));
+
+        if (tamanhoBytes <= 0)
+            throw new ArgumentException("O tamanho do arquivo deve ser maior que zero.", nameof(tamanhoBytes));
 
         if (versao <= 0)
             throw new ArgumentException(

@@ -61,14 +61,34 @@ public class CurriculoService : ICurriculoService
         return createdCurriculo.ToCurriculoDTO()!;
     }
 
-    public async Task<CurriculoDTO> UpdateAsync(CurriculoDTO curriculo)
+    public async Task<CurriculoDTO> UpdateAsync(
+        CurriculoDTO curriculo,
+        CriarCurriculoInput? novoArquivo = null)
     {
         ArgumentNullException.ThrowIfNull(curriculo);
 
         var curriculoEntity = await GetEntityByIdAsync(curriculo.CurriculoId);
+        var storageKeyAnterior = curriculoEntity.StorageKey;
         curriculoEntity.UpdateDetails(curriculo.Nome, curriculo.Versao);
 
+        if (novoArquivo is not null)
+        {
+            await ValidatePdfAsync(novoArquivo);
+
+            var novaStorageKey = $"{Guid.NewGuid():N}.pdf";
+            await _arquivoStorage.SalvarAsync(novoArquivo.Arquivo, novaStorageKey);
+            curriculoEntity.UpdateFile(
+                novoArquivo.NomeArquivo,
+                novaStorageKey,
+                novoArquivo.ContentType,
+                novoArquivo.TamanhoBytes);
+        }
+
         var updatedCurriculo = await _curriculoRepository.UpdateAsync(curriculoEntity);
+
+        if (novoArquivo is not null)
+            await _arquivoStorage.ExcluirAsync(storageKeyAnterior);
+
         return updatedCurriculo.ToCurriculoDTO()!;
     }
 

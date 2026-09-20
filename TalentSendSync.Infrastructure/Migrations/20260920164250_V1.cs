@@ -18,7 +18,9 @@ namespace TalentSendSync.Infrastructure.Migrations
                     CurriculoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     NomeArquivo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    UrlArquivo = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    StorageKey = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    TamanhoBytes = table.Column<long>(type: "bigint", nullable: false),
                     Versao = table.Column<int>(type: "int", nullable: false),
                     DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Ativo = table.Column<bool>(type: "bit", nullable: false)
@@ -56,8 +58,7 @@ namespace TalentSendSync.Infrastructure.Migrations
                 name: "HistoricosContato",
                 columns: table => new
                 {
-                    HistoricoContatoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HistoricoContatoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DataContato = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TipoContato = table.Column<int>(type: "int", nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),

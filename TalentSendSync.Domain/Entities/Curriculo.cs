@@ -60,6 +60,20 @@ public class Curriculo
         Versao = versao;
     }
 
+    public void UpdateFile(
+        string nomeArquivo,
+        string storageKey,
+        string contentType,
+        long tamanhoBytes)
+    {
+        ValidateDomain(Nome, nomeArquivo, storageKey, contentType, tamanhoBytes, Versao);
+
+        NomeArquivo = nomeArquivo.Trim();
+        StorageKey = storageKey.Trim();
+        ContentType = contentType.Trim();
+        TamanhoBytes = tamanhoBytes;
+    }
+
     private static void ValidateDomain(
         string nome,
         string nomeArquivo,

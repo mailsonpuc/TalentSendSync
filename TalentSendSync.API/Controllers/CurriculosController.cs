@@ -98,18 +98,55 @@ public class CurriculosController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Consumes("multipart/form-data")]
+    [RequestSizeLimit(10 * 1024 * 1024)]
     [ProducesResponseType(typeof(CurriculoDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CurriculoDTO>> Update(Guid id, [FromBody] CurriculoDTO curriculo)
+    public async Task<ActionResult<CurriculoDTO>> Update(
+        Guid id,
+        [FromForm] AtualizarCurriculoRequest request)
     {
-        if (id != curriculo.CurriculoId)
-            return BadRequest("O ID da rota deve ser igual ao ID do currículo.");
-
-        if (await _curriculoService.GetByIdAsync(id) is null)
+        var curriculo = await _curriculoService.GetByIdAsync(id);
+        if (curriculo is null)
             return NotFound();
 
-        var updatedCurriculo = await _curriculoService.UpdateAsync(curriculo);
+        CriarCurriculoInput? novoArquivo = null;
+        if (request.Arquivo is not null)
+        {
+            await using var arquivoStream = request.Arquivo.OpenReadStream();
+            novoArquivo = new CriarCurriculoInput(
+                request.Nome,
+                request.Versao,
+                arquivoStream,
+                request.Arquivo.FileName,
+                request.Arquivo.ContentType,
+                request.Arquivo.Length);
+
+            try
+            {
+                var updatedWithFile = await _curriculoService.UpdateAsync(curriculo, novoArquivo);
+                await _unitOfWork.CommitAsync();
+                return Ok(updatedWithFile);
+            }
+            catch (ArgumentException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        CurriculoDTO updatedCurriculo;
+        try
+        {
+            curriculo.Nome = request.Nome;
+            curriculo.Versao = request.Versao;
+            updatedCurriculo = await _curriculoService.UpdateAsync(curriculo);
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(exception.Message);
+        }
+
         await _unitOfWork.CommitAsync();
 
         return Ok(updatedCurriculo);

@@ -12,7 +12,7 @@ using TalentSendSync.Infrastructure.Context;
 namespace TalentSendSync.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260919001336_V1")]
+    [Migration("20260920164250_V1")]
     partial class V1
     {
         /// <inheritdoc />
@@ -74,6 +74,11 @@ namespace TalentSendSync.Infrastructure.Migrations
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
 
@@ -87,10 +92,13 @@ namespace TalentSendSync.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("UrlArquivo")
+                    b.Property<string>("StorageKey")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("TamanhoBytes")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Versao")
                         .HasColumnType("int");
@@ -102,11 +110,9 @@ namespace TalentSendSync.Infrastructure.Migrations
 
             modelBuilder.Entity("TalentSendSync.Domain.Entities.HistoricoContato", b =>
                 {
-                    b.Property<int>("HistoricoContatoId")
+                    b.Property<Guid>("HistoricoContatoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HistoricoContatoId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CandidaturaId")
                         .HasColumnType("uniqueidentifier");

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using TalentSendSync.Domain.Enums;
 
 namespace TalentSendSync.Application.DTOs;
@@ -14,6 +15,7 @@ public class HistoricoContatoDTO
 
     public Guid CandidaturaId { get; set; }
 
+    [JsonIgnore]
     public CandidaturaHistoricoDTO? Candidatura { get; set; }
 
 }

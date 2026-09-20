@@ -6,6 +6,7 @@ using TalentSendSync.Application.Interfaces;
 using TalentSendSync.Application.Services;
 using TalentSendSync.Domain.Interfaces;
 using TalentSendSync.Infrastructure.Context;
+using TalentSendSync.Infrastructure.HealthChecks;
 using TalentSendSync.Infrastructure.Repositories;
 using TalentSendSync.Infrastructure.Storage;
 
@@ -30,6 +31,9 @@ public static class DependencyInjectionAPI
                 b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)
             )
         );
+
+        services.AddHealthChecks()
+            .AddCheck<DatabaseHealthCheck>("database");
 
         services.AddScoped<IArquivoStorage>(serviceProvider =>
             new LocalFileStorage(serviceProvider

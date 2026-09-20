@@ -24,7 +24,7 @@ public class CurriculosController : ControllerBase
         _unitOfWork = unitOfWork;
     }
 
-    [HttpGet]
+    [HttpGet("pagination")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> GetPaged(
         [FromQuery] int pageNumber = 1,

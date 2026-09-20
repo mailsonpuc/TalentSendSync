@@ -21,11 +21,11 @@ public class HistoricoContatoController : ControllerBase
 		_unitOfWork = unitOfWork;
 	}
 
-	[HttpGet]
+	[HttpGet("pagination")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<ActionResult> GetPaged(
-		[FromQuery] int pageNumber = 1,
-		[FromQuery] int pageSize = 10)
+	   [FromQuery] int pageNumber = 1,
+	   [FromQuery] int pageSize = 10)
 	{
 		var historicos = await _historicoContatoService.GetHistoricosPagedAsync(pageNumber, pageSize);
 		return Ok(historicos);
@@ -37,7 +37,7 @@ public class HistoricoContatoController : ControllerBase
 	public async Task<ActionResult<HistoricoContatoDTO>> GetById(Guid id)
 	{
 		var historico = await _historicoContatoService.GetByIdAsync(id);
-		return historico is null ? NotFound(new {message = "Nada encontrado"}) : Ok(historico);
+		return historico is null ? NotFound(new { message = "Nada encontrado" }) : Ok(historico);
 	}
 
 	[HttpPost]

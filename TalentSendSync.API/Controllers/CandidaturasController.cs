@@ -21,7 +21,8 @@ public class CandidaturasController : ControllerBase
 		_unitOfWork = unitOfWork;
 	}
 
-	[HttpGet]
+	[HttpGet("oculto")]
+	[ApiExplorerSettings(IgnoreApi = true)]
 	[ProducesResponseType(typeof(IEnumerable<CandidaturaDTO>), StatusCodes.Status200OK)]
 	public async Task<ActionResult<IEnumerable<CandidaturaDTO>>> GetAll()
 	{
@@ -29,7 +30,7 @@ public class CandidaturasController : ControllerBase
 		return Ok(await candidaturas.ToListAsync());
 	}
 
-	[HttpGet("paged")]
+	[HttpGet("pagination")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<ActionResult> GetPaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
 	{
@@ -44,7 +45,7 @@ public class CandidaturasController : ControllerBase
 	{
 		var candidatura = await _candidaturaService.GetByIdAsync(id);
 
-		return candidatura is null ? NotFound(new {message = "Nada encontrado"}) : Ok(candidatura);
+		return candidatura is null ? NotFound(new { message = "Nada encontrado" }) : Ok(candidatura);
 	}
 
 	[HttpPost]

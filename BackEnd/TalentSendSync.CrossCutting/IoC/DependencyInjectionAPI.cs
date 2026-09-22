@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,9 @@ using TalentSendSync.Application.Services;
 using TalentSendSync.Domain.Interfaces;
 using TalentSendSync.Infrastructure.Context;
 using TalentSendSync.Infrastructure.HealthChecks;
+using TalentSendSync.Infrastructure.Identity;
+using TalentSendSync.Infrastructure.Identity.Interfaces;
+using TalentSendSync.Infrastructure.Identity.Services;
 using TalentSendSync.Infrastructure.Repositories;
 using TalentSendSync.Infrastructure.Storage;
 
@@ -71,6 +75,40 @@ public static class DependencyInjectionAPI
                 unitOfWork.CandidaturaRepository);
         });
 
+
+
+        // ===============================
+        // CONFIGURAÇÃO DO ASP.NET IDENTITY
+        // ===============================
+        services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+
+
+        services.Configure<IdentityOptions>(options =>
+        {
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequiredLength = 6;
+            options.Password.RequiredUniqueChars = 1;
+
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
+
+            options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            options.User.RequireUniqueEmail = true;
+        });
+
+              // ===============================
+        // SERVIÇO DE AUTENTICAÇÃO
+        // ===============================
+        services.AddScoped<IAuthenticate, AuthenticateService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         return services;
 

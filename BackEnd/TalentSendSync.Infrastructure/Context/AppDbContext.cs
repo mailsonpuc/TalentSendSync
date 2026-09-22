@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TalentSendSync.Domain.Entities;
+using TalentSendSync.Infrastructure.Identity;
 
 namespace TalentSendSync.Infrastructure.Context;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     public AppDbContext(DbContextOptions options) : base(options)
     {

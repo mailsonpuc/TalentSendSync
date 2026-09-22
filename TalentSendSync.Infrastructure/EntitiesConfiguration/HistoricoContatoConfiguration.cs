@@ -22,11 +22,6 @@ public class HistoricoContatoConfiguration: IEntityTypeConfiguration<HistoricoCo
         builder.Property(historico => historico.Descricao)
             .IsRequired()
             .HasMaxLength(1000);
-
-        builder.HasOne(historico => historico.Candidatura)
-            .WithMany(candidatura => candidatura.HistoricosContato)
-            .HasForeignKey(historico => historico.CandidaturaId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
     
 }

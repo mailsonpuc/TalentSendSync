@@ -39,11 +39,6 @@ public class CurriculoConfiguration : IEntityTypeConfiguration<Curriculo>
 
         builder.Property(curriculo => curriculo.Ativo)
             .IsRequired();
-
-        builder.HasMany(curriculo => curriculo.Candidaturas)
-            .WithOne(candidatura => candidatura.Curriculo)
-            .HasForeignKey(candidatura => candidatura.CurriculoId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
     
 }

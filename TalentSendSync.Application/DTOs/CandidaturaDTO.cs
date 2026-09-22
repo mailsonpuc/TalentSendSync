@@ -19,11 +19,18 @@ public class CandidaturaDTO
 
     public StatusEnum Status { get; set; }
 
+    public string StatusNome => Status.GetDisplayName();
 
+    public string? Observacoes { get; set; }
 
     // FK Curriculo
     public Guid CurriculoId { get; set; }
-    // navegação: uma candidatura aponta para um currículo
-    //public Curriculo? Curriculo { get; private set; }
 
+    // Propriedades adicionais para o frontend
+    public string? CurriculoNome { get; set; }
+
+    public IEnumerable<HistoricoContatoResumoDTO> HistoricosContato { get; set; } = [];
+
+    // Alias para compatibilidade com frontend
+    public DateTime DataCandidatura => DataEnvio;
 }

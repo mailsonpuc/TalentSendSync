@@ -51,6 +51,11 @@ public static class DependencyInjectionAPI
                 unitOfWork.CandidaturaRepository,
                 unitOfWork.CurriculoRepository);
         });
+        services.AddScoped<IDashboardService>(serviceProvider =>
+        {
+            var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+            return new DashboardService(unitOfWork.CandidaturaRepository);
+        });
         services.AddScoped<ICurriculoService>(serviceProvider =>
         {
             var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();

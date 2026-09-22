@@ -1,6 +1,7 @@
 
 using TalentSendSync.Application.DTOs;
 using TalentSendSync.Domain.Entities;
+using TalentSendSync.Domain.Enums;
 
 namespace TalentSendSync.Application.Mappings;
 
@@ -18,6 +19,9 @@ public static class HistoricoContatoDTOMappingExtensions
 			TipoContato = historicoContato.TipoContato,
 			Descricao = historicoContato.Descricao,
 			CandidaturaId = historicoContato.CandidaturaId,
+			Responsavel = historicoContato.Responsavel,
+			CandidaturaStatus = historicoContato.Candidatura?.Status.ToString(),
+			CandidaturaStatusNome = historicoContato.Candidatura?.Status.GetDisplayName(),
 			Candidatura = historicoContato.Candidatura is null
 				? null
 				: new CandidaturaHistoricoDTO
@@ -38,7 +42,8 @@ public static class HistoricoContatoDTOMappingExtensions
 							DataContato = contato.DataContato,
 							TipoContato = contato.TipoContato,
 							Descricao = contato.Descricao,
-							CandidaturaId = contato.CandidaturaId
+							CandidaturaId = contato.CandidaturaId,
+							Responsavel = contato.Responsavel
 						})
 						.ToList()
 				}
@@ -54,7 +59,8 @@ public static class HistoricoContatoDTOMappingExtensions
 			historicoContatoDTO.DataContato,
 			historicoContatoDTO.TipoContato,
 			historicoContatoDTO.Descricao,
-			historicoContatoDTO.CandidaturaId);
+			historicoContatoDTO.CandidaturaId,
+			historicoContatoDTO.Responsavel);
 	}
 
 	public static HistoricoContato? ToHistoricoContato(this HistoricoContatoCreateDTO historicoContatoDTO)
@@ -65,9 +71,9 @@ public static class HistoricoContatoDTOMappingExtensions
 		return new HistoricoContato(
 			historicoContatoDTO.DataContato,
 			historicoContatoDTO.TipoContato,
-
 			historicoContatoDTO.Descricao,
-			historicoContatoDTO.CandidaturaId);
+			historicoContatoDTO.CandidaturaId,
+			historicoContatoDTO.Responsavel);
 	}
 
 	public static IEnumerable<HistoricoContatoDTO> ToHistoricoContatoDTOList(

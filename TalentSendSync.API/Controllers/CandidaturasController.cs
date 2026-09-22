@@ -32,10 +32,17 @@ public class CandidaturasController : ControllerBase
 
 	[HttpGet("pagination")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public async Task<ActionResult> GetPaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+	public async Task<ActionResult<object>> GetPaged([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
 	{
 		var candidaturas = await _candidaturaService.GetCandidaturasPagedAsync(pageNumber, pageSize);
-		return Ok(candidaturas);
+		return Ok(new
+		{
+			items = candidaturas,
+			currentPage = candidaturas.CurrentPage,
+			pageSize = candidaturas.PageSize,
+			totalPages = candidaturas.TotalPages,
+			totalCount = candidaturas.TotalCount
+		});
 	}
 
 	[HttpGet("{id:guid}")]

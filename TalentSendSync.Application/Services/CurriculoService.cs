@@ -4,6 +4,7 @@ using TalentSendSync.Application.Mappings;
 using TalentSendSync.Domain.Entities;
 using TalentSendSync.Domain.Interfaces;
 using TalentSendSync.Domain.Pagination;
+using TalentSendSync.Domain.Validation;
 
 namespace TalentSendSync.Application.Services;
 
@@ -97,6 +98,13 @@ public class CurriculoService : ICurriculoService
         ArgumentNullException.ThrowIfNull(curriculo);
 
         var curriculoEntity = await GetEntityByIdAsync(curriculo.CurriculoId);
+
+        if (curriculoEntity.Candidaturas.Any())
+        {
+            throw new DeleteConstraintViolationException(
+                "Não é possível excluir este currículo porque existem candidaturas vinculadas a ele.");
+        }
+
         var removedCurriculo = await _curriculoRepository.RemoveAsync(curriculoEntity);
         await _arquivoStorage.ExcluirAsync(removedCurriculo.StorageKey);
 

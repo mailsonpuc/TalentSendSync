@@ -23,12 +23,19 @@ public class HistoricoContatoController : ControllerBase
 
 	[HttpGet("pagination")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public async Task<ActionResult> GetPaged(
+	public async Task<ActionResult<object>> GetPaged(
 	   [FromQuery] int pageNumber = 1,
 	   [FromQuery] int pageSize = 10)
 	{
 		var historicos = await _historicoContatoService.GetHistoricosPagedAsync(pageNumber, pageSize);
-		return Ok(historicos);
+		return Ok(new
+		{
+			items = historicos,
+			currentPage = historicos.CurrentPage,
+			pageSize = historicos.PageSize,
+			totalPages = historicos.TotalPages,
+			totalCount = historicos.TotalCount
+		});
 	}
 
 	[HttpGet("{id:guid}")]

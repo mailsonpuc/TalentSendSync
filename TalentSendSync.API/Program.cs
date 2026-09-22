@@ -9,9 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Api
 builder.Services.AddInfrastructureAPI(builder.Configuration);
+
 // Swagger
 builder.Services.AddInfrastructureSwagger(builder.Configuration);
 
+// CORS
+builder.Services.AddInfrastructureCors(builder.Configuration);
 
 
 
@@ -41,6 +44,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 

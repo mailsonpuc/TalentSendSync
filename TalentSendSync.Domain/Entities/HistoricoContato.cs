@@ -12,6 +12,8 @@ public class HistoricoContato
 
     public string Descricao { get; private set; } = string.Empty;
 
+    public string? Responsavel { get; private set; }
+
 
     // FK Candidatura chave primaria
     public Guid CandidaturaId { get; private set; }
@@ -23,7 +25,7 @@ public class HistoricoContato
 
 
 
-    public HistoricoContato(DateTime dataContato, TipoContatoEnum tipoContato, string descricao, Guid candidaturaId)
+    public HistoricoContato(DateTime dataContato, TipoContatoEnum tipoContato, string descricao, Guid candidaturaId, string? responsavel = null)
     {
         ValidateDomain(dataContato, tipoContato, descricao, candidaturaId);
 
@@ -32,13 +34,15 @@ public class HistoricoContato
         TipoContato = tipoContato;
         Descricao = descricao.Trim();
         CandidaturaId = candidaturaId;
+        Responsavel = responsavel?.Trim();
     }
 
     public void UpdateDetails(
         DateTime dataContato,
         TipoContatoEnum tipoContato,
         string descricao,
-        Guid candidaturaId)
+        Guid candidaturaId,
+        string? responsavel = null)
     {
         ValidateDomain(dataContato, tipoContato, descricao, candidaturaId);
 
@@ -46,6 +50,7 @@ public class HistoricoContato
         TipoContato = tipoContato;
         Descricao = descricao.Trim();
         CandidaturaId = candidaturaId;
+        Responsavel = responsavel?.Trim();
     }
 
 

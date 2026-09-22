@@ -1,6 +1,6 @@
-
 using TalentSendSync.Application.DTOs;
 using TalentSendSync.Domain.Entities;
+using TalentSendSync.Domain.Enums;
 
 namespace TalentSendSync.Application.Mappings;
 
@@ -20,7 +20,21 @@ public static class CadidaturaDTOMappingExtensions
             LinkVaga = candidatura.LinkVaga,
             Status = candidatura.Status,
             CurriculoId = candidatura.CurriculoId,
-            DataEnvio = candidatura.DataEnvio
+            DataEnvio = candidatura.DataEnvio,
+            Observacoes = candidatura.Observacoes,
+            CurriculoNome = candidatura.Curriculo?.Nome,
+            HistoricosContato = candidatura.HistoricosContato
+                .OrderBy(historico => historico.DataContato)
+                .Select(historico => new HistoricoContatoResumoDTO
+                {
+                    HistoricoContatoId = historico.HistoricoContatoId,
+                    DataContato = historico.DataContato,
+                    TipoContato = historico.TipoContato,
+                    Descricao = historico.Descricao,
+                    CandidaturaId = historico.CandidaturaId,
+                    Responsavel = historico.Responsavel
+                })
+                .ToList()
         };
     }
 
@@ -35,7 +49,8 @@ public static class CadidaturaDTOMappingExtensions
             candidaturaDTO.PretensaoSalarial,
             candidaturaDTO.LinkVaga,
             candidaturaDTO.Status,
-            candidaturaDTO.CurriculoId);
+            candidaturaDTO.CurriculoId,
+            candidaturaDTO.Observacoes);
     }
 
     public static IEnumerable<CandidaturaDTO> ToCandidaturaDTOList(this IEnumerable<Candidatura> candidaturas)

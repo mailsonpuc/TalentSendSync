@@ -2,6 +2,7 @@
 using TalentSendSync.Application.DTOs;
 using TalentSendSync.Application.Interfaces;
 using TalentSendSync.Application.Mappings;
+using TalentSendSync.Domain.Enums;
 using TalentSendSync.Domain.Interfaces;
 using TalentSendSync.Domain.Pagination;
 
@@ -51,7 +52,8 @@ public class CandidaturaService : ICandidaturaService
             PretensaoSalarial = candidatura.PretensaoSalarial,
             LinkVaga = candidatura.LinkVaga,
             Status = candidatura.Status,
-            CurriculoId = candidatura.CurriculoId
+            CurriculoId = candidatura.CurriculoId,
+            Observacoes = candidatura.Observacoes
         });
     }
 
@@ -89,7 +91,8 @@ public class CandidaturaService : ICandidaturaService
             candidatura.Cargo,
             candidatura.PretensaoSalarial,
             candidatura.LinkVaga,
-            candidatura.Status);
+            candidatura.Status,
+            candidatura.Observacoes);
 
         var updatedCandidatura = await _candidaturaRepository.UpdateAsync(candidaturaEntity);
         return updatedCandidatura.ToCandidaturaDTO()!;

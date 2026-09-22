@@ -18,6 +18,7 @@ public class Candidatura
 
     public StatusEnum Status { get; private set; }
 
+    public string? Observacoes { get; private set; }
 
     //candidatura tem uma coleçao de historico. 1:N
     public ICollection<HistoricoContato> HistoricosContato { get; private set; } = new List<HistoricoContato>();
@@ -29,21 +30,9 @@ public class Candidatura
     public Curriculo? Curriculo { get; private set; }
 
     public Candidatura(string empresa, string cargo, decimal? pretensaoSalarial, string? linkVaga, StatusEnum status)
+        : this(empresa, cargo, pretensaoSalarial, linkVaga, status, Guid.Empty, null)
     {
-        ValidateDomain(empresa, cargo, pretensaoSalarial, linkVaga, status);
-
-        CandidaturaId = Guid.NewGuid();
-        Empresa = empresa.Trim();
-        Cargo = cargo.Trim();
-        DataEnvio = DateTime.UtcNow;
-        PretensaoSalarial = pretensaoSalarial;
-        LinkVaga = linkVaga?.Trim();
-        Status = status;
     }
-
-
-
-
 
     public Candidatura(
         string empresa,
@@ -51,10 +40,12 @@ public class Candidatura
         decimal? pretensaoSalarial,
         string? linkVaga,
         StatusEnum status,
-        Guid curriculoId)
+        Guid curriculoId,
+        string? observacoes = null)
     {
         ValidateDomain(empresa, cargo, pretensaoSalarial, linkVaga, status);
-        ValidateCurriculoId(curriculoId);
+        if (curriculoId != Guid.Empty)
+            ValidateCurriculoId(curriculoId);
 
         CandidaturaId = Guid.NewGuid();
         Empresa = empresa.Trim();
@@ -63,10 +54,11 @@ public class Candidatura
         PretensaoSalarial = pretensaoSalarial;
         LinkVaga = linkVaga?.Trim();
         Status = status;
+        Observacoes = observacoes?.Trim();
         CurriculoId = curriculoId;
     }
 
-    public void UpdateDetails(string empresa, string cargo, decimal? pretensaoSalarial, string? linkVaga, StatusEnum status)
+    public void UpdateDetails(string empresa, string cargo, decimal? pretensaoSalarial, string? linkVaga, StatusEnum status, string? observacoes = null)
     {
         ValidateDomain(empresa, cargo, pretensaoSalarial, linkVaga, status);
 
@@ -75,6 +67,12 @@ public class Candidatura
         PretensaoSalarial = pretensaoSalarial;
         LinkVaga = linkVaga?.Trim();
         Status = status;
+        Observacoes = observacoes?.Trim();
+    }
+
+    public void UpdateObservacoes(string? observacoes)
+    {
+        Observacoes = observacoes?.Trim();
     }
 
     private static void ValidateDomain(string empresa, string cargo, decimal? pretensaoSalarial, string? linkVaga, StatusEnum status)

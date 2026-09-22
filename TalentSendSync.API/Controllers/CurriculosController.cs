@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TalentSendSync.Application.DTOs;
 using TalentSendSync.Application.Interfaces;
 using TalentSendSync.Domain.Interfaces;
+using TalentSendSync.Domain.Validation;
 using TalentSendSync.API.Requests;
 
 namespace TalentSendSync.API.Controllers;
@@ -26,12 +27,19 @@ public class CurriculosController : ControllerBase
 
     [HttpGet("pagination")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> GetPaged(
+    public async Task<ActionResult<object>> GetPaged(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
         var curriculos = await _curriculoService.GetCurriculosPagedAsync(pageNumber, pageSize);
-        return Ok(curriculos);
+        return Ok(new
+        {
+            items = curriculos,
+            currentPage = curriculos.CurrentPage,
+            pageSize = curriculos.PageSize,
+            totalPages = curriculos.TotalPages,
+            totalCount = curriculos.TotalCount
+        });
     }
 
     [HttpGet("{id:guid}")]
@@ -157,15 +165,22 @@ public class CurriculosController : ControllerBase
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var curriculo = await _curriculoService.GetByIdAsync(id);
         if (curriculo is null)
             return NotFound();
 
-        await _curriculoService.RemoveAsync(curriculo);
-        await _unitOfWork.CommitAsync();
-
-        return NoContent();
+        try
+        {
+            await _curriculoService.RemoveAsync(curriculo);
+            await _unitOfWork.CommitAsync();
+            return NoContent();
+        }
+        catch (DeleteConstraintViolationException exception)
+        {
+            return Conflict(new { message = exception.Message });
+        }
     }
 }

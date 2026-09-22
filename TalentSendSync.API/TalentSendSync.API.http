@@ -1,6 +1,0 @@
-@TalentSendSync.API_HostAddress = http://localhost:5079
-
-GET {{TalentSendSync.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

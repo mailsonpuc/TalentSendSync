@@ -1,8 +1,0 @@
-<Solution>
-  <Project Path="TalentSendSync.API/TalentSendSync.API.csproj" />
-  <Project Path="TalentSendSync.Application/TalentSendSync.Application.csproj" />
-  <Project Path="TalentSendSync.CrossCutting/TalentSendSync.CrossCutting.csproj" />
-  <Project Path="TalentSendSync.Domain/TalentSendSync.Domain.csproj" />
-  <Project Path="TalentSendSync.Infrastructure/TalentSendSync.Infrastructure.csproj" />
-  <Project Path="TalentSendSync.Tests/TalentSendSync.Tests.csproj" />
-</Solution>

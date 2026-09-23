@@ -10,7 +10,7 @@ using TalentSendSync.Infrastructure.Identity.Models;
 
 namespace TalentSendSync.API.Controllers;
 
-[Route("api/v1/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
@@ -48,16 +48,10 @@ public class AuthController : ControllerBase
         var userName = request.UserName;
         var email = request.Email;
         var password = request.Password;
-        
+
         if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
             return BadRequest(new ResponseDTO { Status = "Error", Message = "Username, email and password are required." });
-        }
-
-        var userExists = await _userManager.FindByNameAsync(userName);
-        if (userExists is not null)
-        {
-            return Conflict(new ResponseDTO { Status = "Error", Message = "User already exists." });
         }
 
         var emailExists = await _userManager.FindByEmailAsync(email);
@@ -177,7 +171,18 @@ public class AuthController : ControllerBase
 
 
 
-    //[Authorize(Roles = "admin")]
+
+    /// <summary>
+    /// Adiciona um usuário existente a uma regra do sistema, requer admin.
+    /// </summary>
+    /// <param name="email">E-mail do usuário que receberá a função.</param>
+    /// <param name="roleName">Nome da função que será atribuída ao usuário.</param>
+    /// <returns>Confirmação da atribuição da função.</returns>
+    /// <response code="200">Usuário adicionado à função com sucesso.</response>
+    /// <response code="400">Usuário ou função não encontrados, ou erro ao atribuir a função.</response>
+    /// <response code="401">Token de autenticação ausente ou inválido.</response>
+    /// <response code="403">O usuário autenticado não possui a função admin.</response>
+    [Authorize(Roles = "admin")]
     [HttpPost("AddUserToRole")]
     public async Task<IActionResult> AddUserToRole([FromQuery] string email, [FromQuery] string roleName)
     {

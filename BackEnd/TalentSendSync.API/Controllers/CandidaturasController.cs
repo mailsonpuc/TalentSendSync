@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TalentSendSync.Application.DTOs;
@@ -5,7 +6,7 @@ using TalentSendSync.Application.Interfaces;
 using TalentSendSync.Domain.Interfaces;
 
 namespace TalentSendSync.API.Controllers;
-
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CandidaturasController : ControllerBase

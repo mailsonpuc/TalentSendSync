@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using TalentSendSync.Application.Interfaces;
 using TalentSendSync.Application.Services;
@@ -9,6 +10,7 @@ using TalentSendSync.Domain.Interfaces;
 using TalentSendSync.Infrastructure.Context;
 using TalentSendSync.Infrastructure.HealthChecks;
 using TalentSendSync.Infrastructure.Identity;
+using TalentSendSync.Infrastructure.Identity.Validators;
 using TalentSendSync.Infrastructure.Identity.Interfaces;
 using TalentSendSync.Infrastructure.Identity.Services;
 using TalentSendSync.Infrastructure.Repositories;
@@ -83,6 +85,9 @@ public static class DependencyInjectionAPI
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+
+        services.RemoveAll<IUserValidator<ApplicationUser>>();
+        services.AddScoped<IUserValidator<ApplicationUser>, UserValidator>();
 
 
 

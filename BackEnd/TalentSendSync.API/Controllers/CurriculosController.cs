@@ -4,9 +4,10 @@ using TalentSendSync.Application.Interfaces;
 using TalentSendSync.Domain.Interfaces;
 using TalentSendSync.Domain.Validation;
 using TalentSendSync.API.Requests;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TalentSendSync.API.Controllers;
-
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CurriculosController : ControllerBase

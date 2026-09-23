@@ -19,6 +19,10 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        builder.Entity<ApplicationUser>()
+            .HasIndex(user => user.NormalizedUserName)
+            .IsUnique(false)
+            .HasFilter("[NormalizedUserName] IS NOT NULL");
         builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext)
             .Assembly);
     }

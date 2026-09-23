@@ -1,7 +1,25 @@
+using System.Text.Json.Serialization;
 using TalentSendSync.Domain.Entities;
 using TalentSendSync.Domain.Enums;
 
 namespace TalentSendSync.Application.DTOs;
+
+public class CandidaturaCreateDTO
+{
+    public string Empresa { get; set; } = string.Empty;
+
+    public string Cargo { get; set; } = string.Empty;
+
+    public decimal? PretensaoSalarial { get; set; }
+
+    public string? LinkVaga { get; set; }
+
+    public StatusEnum Status { get; set; }
+
+    public string? Observacoes { get; set; }
+
+    public Guid CurriculoId { get; set; }
+}
 
 public class CandidaturaDTO
 {

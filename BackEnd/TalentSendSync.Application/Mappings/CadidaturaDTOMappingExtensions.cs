@@ -38,7 +38,7 @@ public static class CadidaturaDTOMappingExtensions
         };
     }
 
-    public static Candidatura? ToCandidatura(this CandidaturaDTO candidaturaDTO)
+    public static Candidatura? ToCandidatura(this CandidaturaCreateDTO candidaturaDTO)
     {
         if (candidaturaDTO is null)
             return null;

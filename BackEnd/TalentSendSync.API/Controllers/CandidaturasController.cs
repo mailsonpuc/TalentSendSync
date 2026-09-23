@@ -60,7 +60,7 @@ public class CandidaturasController : ControllerBase
 	[ProducesResponseType(typeof(CandidaturaDTO), StatusCodes.Status201Created)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
-	public async Task<ActionResult<CandidaturaDTO>> Create([FromBody] CandidaturaDTO candidatura)
+	public async Task<ActionResult<CandidaturaDTO>> Create([FromBody] CandidaturaCreateDTO candidatura)
 	{
 		if (candidatura.CurriculoId == Guid.Empty)
 			return BadRequest("O CurriculoId é obrigatório.");

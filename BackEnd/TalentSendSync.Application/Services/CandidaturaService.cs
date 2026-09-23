@@ -23,7 +23,7 @@ public class CandidaturaService : ICandidaturaService
 
 
 
-    public async Task<CandidaturaDTO> CreateAsync(CandidaturaDTO candidatura)
+    public async Task<CandidaturaDTO> CreateAsync(CandidaturaCreateDTO candidatura)
     {
         ArgumentNullException.ThrowIfNull(candidatura);
         await EnsureCurriculoExistsAsync(candidatura.CurriculoId);

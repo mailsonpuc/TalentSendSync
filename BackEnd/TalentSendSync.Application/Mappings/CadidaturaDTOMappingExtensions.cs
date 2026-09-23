@@ -38,7 +38,7 @@ public static class CadidaturaDTOMappingExtensions
         };
     }
 
-    public static Candidatura? ToCandidatura(this CandidaturaCreateDTO candidaturaDTO)
+    public static Candidatura? ToCandidatura(this CandidaturaCreateDTO candidaturaDTO, string userId)
     {
         if (candidaturaDTO is null)
             return null;
@@ -50,7 +50,8 @@ public static class CadidaturaDTOMappingExtensions
             candidaturaDTO.LinkVaga,
             candidaturaDTO.Status,
             candidaturaDTO.CurriculoId,
-            candidaturaDTO.Observacoes);
+            candidaturaDTO.Observacoes,
+            userId);
     }
 
     public static IEnumerable<CandidaturaDTO> ToCandidaturaDTOList(this IEnumerable<Candidatura> candidaturas)

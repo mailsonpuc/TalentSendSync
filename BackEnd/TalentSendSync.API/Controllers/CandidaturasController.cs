@@ -13,13 +13,16 @@ public class CandidaturasController : ControllerBase
 {
 	private readonly ICandidaturaService _candidaturaService;
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly ICurrentUser _currentUser;
 
 	public CandidaturasController(
 		ICandidaturaService candidaturaService,
-		IUnitOfWork unitOfWork)
+		IUnitOfWork unitOfWork,
+		ICurrentUser currentUser)
 	{
 		_candidaturaService = candidaturaService;
 		_unitOfWork = unitOfWork;
+		_currentUser = currentUser;
 	}
 
 	[HttpGet("oculto")]
@@ -65,7 +68,7 @@ public class CandidaturasController : ControllerBase
 		if (candidatura.CurriculoId == Guid.Empty)
 			return BadRequest("O CurriculoId é obrigatório.");
 
-		if (await _unitOfWork.CurriculoRepository.GetByIdAsync(candidatura.CurriculoId) is null)
+		if (await _unitOfWork.CurriculoRepository.GetByIdAsync(candidatura.CurriculoId, _currentUser.UserId) is null)
 			return NotFound("Currículo não encontrado.");
 
 		var createdCandidatura = await _candidaturaService.CreateAsync(candidatura);

@@ -19,19 +19,20 @@ public class CandidaturaRepository : ICandidaturaRepository
 
 
 
-    public Task<IQueryable<Candidatura>> GetCandidaturasAsync()
+    public Task<IQueryable<Candidatura>> GetCandidaturasAsync(string userId)
     {
         IQueryable<Candidatura> query = _context.Candidaturas
             .AsNoTracking()
             .Include(candidatura => candidatura.Curriculo)
-            .Include(candidatura => candidatura.HistoricosContato);
+            .Include(candidatura => candidatura.HistoricosContato)
+            .Where(candidatura => candidatura.UserId == userId);
 
         return Task.FromResult(query);
     }
 
 
  
-    public async Task<PagedList<Candidatura>> GetCandidaturasPagedAsync(int pageNumber, int pageSize)
+    public async Task<PagedList<Candidatura>> GetCandidaturasPagedAsync(int pageNumber, int pageSize, string userId)
     {
         ValidatePagination(pageNumber, pageSize);
 
@@ -39,6 +40,7 @@ public class CandidaturaRepository : ICandidaturaRepository
             .AsNoTracking()
             .Include(candidatura => candidatura.Curriculo)
             .Include(candidatura => candidatura.HistoricosContato)
+            .Where(candidatura => candidatura.UserId == userId)
             .OrderByDescending(candidatura => candidatura.DataEnvio);
 
         return await PagedList<Candidatura>.ToPagedListAsync(query, pageNumber, pageSize);
@@ -54,7 +56,7 @@ public class CandidaturaRepository : ICandidaturaRepository
     }
 
 
-    public async Task<Candidatura?> GetByIdAsync(Guid? id)
+    public async Task<Candidatura?> GetByIdAsync(Guid? id, string userId)
     {
         if (!id.HasValue || id.Value == Guid.Empty)
             return null;
@@ -63,7 +65,7 @@ public class CandidaturaRepository : ICandidaturaRepository
             .AsNoTracking()
             .Include(candidatura => candidatura.Curriculo)
             .Include(candidatura => candidatura.HistoricosContato)
-            .FirstOrDefaultAsync(candidatura => candidatura.CandidaturaId == id.Value);
+            .FirstOrDefaultAsync(candidatura => candidatura.CandidaturaId == id.Value && candidatura.UserId == userId);
     }
 
 

@@ -23,6 +23,9 @@ public static class DependencyInjectionAPI
     public static IServiceCollection AddInfrastructureAPI(this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUser, CurrentUser>();
+
         //Usando em Memomy
         //services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase("DataBase"));
 
@@ -55,26 +58,31 @@ public static class DependencyInjectionAPI
             var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
             return new CandidaturaService(
                 unitOfWork.CandidaturaRepository,
-                unitOfWork.CurriculoRepository);
+                unitOfWork.CurriculoRepository,
+                serviceProvider.GetRequiredService<ICurrentUser>());
         });
         services.AddScoped<IDashboardService>(serviceProvider =>
         {
             var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-            return new DashboardService(unitOfWork.CandidaturaRepository);
+            return new DashboardService(
+                unitOfWork.CandidaturaRepository,
+                serviceProvider.GetRequiredService<ICurrentUser>());
         });
         services.AddScoped<ICurriculoService>(serviceProvider =>
         {
             var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
             return new CurriculoService(
                 unitOfWork.CurriculoRepository,
-                serviceProvider.GetRequiredService<IArquivoStorage>());
+                serviceProvider.GetRequiredService<IArquivoStorage>(),
+                serviceProvider.GetRequiredService<ICurrentUser>());
         });
         services.AddScoped<IHistoricoContatoService>(serviceProvider =>
         {
             var unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
             return new HistoricoContatoService(
                 unitOfWork.HistoricoContatoRepository,
-                unitOfWork.CandidaturaRepository);
+                unitOfWork.CandidaturaRepository,
+                serviceProvider.GetRequiredService<ICurrentUser>());
         });
 
 

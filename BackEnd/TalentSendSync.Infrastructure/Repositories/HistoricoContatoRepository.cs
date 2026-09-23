@@ -26,7 +26,7 @@ public class HistoricoContatoRepository : IHistoricoContatoRepository
         return historicoContato;
     }
 
-    public async Task<HistoricoContato?> GetByIdAsync(Guid? id)
+    public async Task<HistoricoContato?> GetByIdAsync(Guid? id, string userId)
     {
         if (!id.HasValue || id.Value == Guid.Empty)
             return null;
@@ -35,10 +35,10 @@ public class HistoricoContatoRepository : IHistoricoContatoRepository
             .AsTracking()
             .Include(historico => historico.Candidatura)
                 .ThenInclude(candidatura => candidatura!.Curriculo)
-            .FirstOrDefaultAsync(historico => historico.HistoricoContatoId == id.Value);
+            .FirstOrDefaultAsync(historico => historico.HistoricoContatoId == id.Value && historico.Candidatura != null && historico.Candidatura.UserId == userId);
     }
 
-    public async Task<PagedList<HistoricoContato>> GetHistoricosPagedAsync(int pageNumber, int pageSize)
+    public async Task<PagedList<HistoricoContato>> GetHistoricosPagedAsync(int pageNumber, int pageSize, string userId)
     {
         ValidatePagination(pageNumber, pageSize);
 
@@ -46,6 +46,7 @@ public class HistoricoContatoRepository : IHistoricoContatoRepository
             .AsTracking()
             .Include(historico => historico.Candidatura)
                 .ThenInclude(candidatura => candidatura!.Curriculo)
+            .Where(historico => historico.Candidatura != null && historico.Candidatura.UserId == userId)
             .OrderByDescending(historico => historico.DataContato);
 
         return await PagedList<HistoricoContato>.ToPagedListAsync(query, pageNumber, pageSize);

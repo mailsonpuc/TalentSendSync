@@ -4,6 +4,8 @@ public class Curriculo
 {
     public Guid CurriculoId { get; private set; }
 
+    public string UserId { get; private set; } = string.Empty;
+
     public string Nome { get; private set; } = string.Empty;
 
     public string NomeArquivo { get; private set; } = string.Empty;
@@ -37,11 +39,16 @@ public class Curriculo
         string storageKey,
         string contentType,
         long tamanhoBytes,
-        int versao)
+        int versao,
+        string userId = "legacy")
     {
+        if (string.IsNullOrWhiteSpace(userId))
+            throw new ArgumentException("O usuário é obrigatório.", nameof(userId));
+
         ValidateDomain(nome, nomeArquivo, storageKey, contentType, tamanhoBytes, versao);
 
         CurriculoId = Guid.NewGuid();
+        UserId = userId;
         Nome = nome.Trim();
         NomeArquivo = nomeArquivo.Trim();
         StorageKey = storageKey.Trim();

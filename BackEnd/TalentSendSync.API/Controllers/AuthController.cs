@@ -142,7 +142,7 @@ public class AuthController : ControllerBase
 
 
 
-    //[Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin")]
     [HttpPost("CreateRole")]
     public async Task<IActionResult> CreateRole([FromQuery] string roleName)
     {
@@ -267,7 +267,7 @@ public class AuthController : ControllerBase
 
 
 
-    //[Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin")]
     [HttpPost("revoke/{username}")]
     public async Task<IActionResult> Revoke([FromRoute] string username)
     {

@@ -25,7 +25,7 @@ public class CurriculoRepository : ICurriculoRepository
         return curriculo;
     }
 
-    public async Task<Curriculo?> GetByIdAsync(Guid? id)
+    public async Task<Curriculo?> GetByIdAsync(Guid? id, string userId)
     {
         if (!id.HasValue || id.Value == Guid.Empty)
             return null;
@@ -33,16 +33,17 @@ public class CurriculoRepository : ICurriculoRepository
         return await _context.Curriculos
             .AsNoTracking()
             .Include(curriculo => curriculo.Candidaturas)
-            .FirstOrDefaultAsync(curriculo => curriculo.CurriculoId == id.Value);
+            .FirstOrDefaultAsync(curriculo => curriculo.CurriculoId == id.Value && curriculo.UserId == userId);
     }
 
-    public async Task<PagedList<Curriculo>> GetCurriculosPagedAsync(int pageNumber, int pageSize)
+    public async Task<PagedList<Curriculo>> GetCurriculosPagedAsync(int pageNumber, int pageSize, string userId)
     {
         ValidatePagination(pageNumber, pageSize);
 
         var query = _context.Curriculos
             .AsNoTracking()
             .Include(curriculo => curriculo.Candidaturas)
+            .Where(curriculo => curriculo.UserId == userId)
             .OrderByDescending(curriculo => curriculo.DataCriacao);
 
         return await PagedList<Curriculo>.ToPagedListAsync(query, pageNumber, pageSize);

@@ -6,6 +6,8 @@ public class Candidatura
 {
     public Guid CandidaturaId { get; private set; }
 
+    public string UserId { get; private set; } = string.Empty;
+
     public string Empresa { get; private set; } = string.Empty;
 
     public string Cargo { get; private set; } = string.Empty;
@@ -30,7 +32,7 @@ public class Candidatura
     public Curriculo? Curriculo { get; private set; }
 
     public Candidatura(string empresa, string cargo, decimal? pretensaoSalarial, string? linkVaga, StatusEnum status)
-        : this(empresa, cargo, pretensaoSalarial, linkVaga, status, Guid.Empty, null)
+        : this(empresa, cargo, pretensaoSalarial, linkVaga, status, Guid.Empty, null, "legacy")
     {
     }
 
@@ -41,13 +43,18 @@ public class Candidatura
         string? linkVaga,
         StatusEnum status,
         Guid curriculoId,
-        string? observacoes = null)
+        string? observacoes,
+        string userId = "legacy")
     {
+        if (string.IsNullOrWhiteSpace(userId))
+            throw new ArgumentException("O usuário é obrigatório.", nameof(userId));
+
         ValidateDomain(empresa, cargo, pretensaoSalarial, linkVaga, status);
         if (curriculoId != Guid.Empty)
             ValidateCurriculoId(curriculoId);
 
         CandidaturaId = Guid.NewGuid();
+        UserId = userId;
         Empresa = empresa.Trim();
         Cargo = cargo.Trim();
         DataEnvio = DateTime.UtcNow;

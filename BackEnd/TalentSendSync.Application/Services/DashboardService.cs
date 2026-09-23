@@ -9,15 +9,17 @@ namespace TalentSendSync.Application.Services;
 public class DashboardService : IDashboardService
 {
     private readonly ICandidaturaRepository _candidaturaRepository;
+    private readonly ICurrentUser _currentUser;
 
-    public DashboardService(ICandidaturaRepository candidaturaRepository)
+    public DashboardService(ICandidaturaRepository candidaturaRepository, ICurrentUser currentUser)
     {
         _candidaturaRepository = candidaturaRepository;
+        _currentUser = currentUser;
     }
 
     public async Task<DashboardDTO> GetCandidaturasAsync()
     {
-        var candidaturas = await _candidaturaRepository.GetCandidaturasAsync();
+        var candidaturas = await _candidaturaRepository.GetCandidaturasAsync(_currentUser.UserId);
 
         var total = await candidaturas.CountAsync();
         var statusCounts = await candidaturas

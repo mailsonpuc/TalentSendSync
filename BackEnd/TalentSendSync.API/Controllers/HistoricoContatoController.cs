@@ -13,13 +13,16 @@ public class HistoricoContatoController : ControllerBase
 {
 	private readonly IHistoricoContatoService _historicoContatoService;
 	private readonly IUnitOfWork _unitOfWork;
+	 private readonly ICurrentUser _currentUser;
 
 	public HistoricoContatoController(
 		IHistoricoContatoService historicoContatoService,
-		IUnitOfWork unitOfWork)
+		IUnitOfWork unitOfWork,
+		ICurrentUser currentUser)
 	{
 		_historicoContatoService = historicoContatoService;
 		_unitOfWork = unitOfWork;
+		_currentUser = currentUser;
 	}
 
 	[HttpGet("pagination")]
@@ -53,7 +56,7 @@ public class HistoricoContatoController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<HistoricoContatoDTO>> Create([FromBody] HistoricoContatoCreateDTO historicoContato)
 	{
-		if (await _unitOfWork.CandidaturaRepository.GetByIdAsync(historicoContato.CandidaturaId) is null)
+		if (await _unitOfWork.CandidaturaRepository.GetByIdAsync(historicoContato.CandidaturaId, _currentUser.UserId) is null)
 			return NotFound("Candidatura não encontrada.");
 
 		var createdHistorico = await _historicoContatoService.CreateAsync(historicoContato);
@@ -76,7 +79,7 @@ public class HistoricoContatoController : ControllerBase
 		if (await _historicoContatoService.GetByIdAsync(id) is null)
 			return NotFound();
 
-		if (await _unitOfWork.CandidaturaRepository.GetByIdAsync(historicoContato.CandidaturaId) is null)
+		if (await _unitOfWork.CandidaturaRepository.GetByIdAsync(historicoContato.CandidaturaId, _currentUser.UserId) is null)
 			return NotFound("Candidatura não encontrada.");
 
 		var updatedHistorico = await _historicoContatoService.UpdateAsync(historicoContato);

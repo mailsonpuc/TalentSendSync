@@ -12,6 +12,12 @@ public class CandidaturaConfiguration: IEntityTypeConfiguration<Candidatura>
 
         builder.HasKey(candidatura => candidatura.CandidaturaId);
 
+        builder.Property(candidatura => candidatura.UserId)
+            .IsRequired()
+            .HasMaxLength(450);
+
+        builder.HasIndex(candidatura => candidatura.UserId);
+
         builder.Property(candidatura => candidatura.Empresa)
             .IsRequired()
             .HasMaxLength(200);

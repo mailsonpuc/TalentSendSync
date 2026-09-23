@@ -12,6 +12,12 @@ public class CurriculoConfiguration : IEntityTypeConfiguration<Curriculo>
 
         builder.HasKey(curriculo => curriculo.CurriculoId);
 
+        builder.Property(curriculo => curriculo.UserId)
+            .IsRequired()
+            .HasMaxLength(450);
+
+        builder.HasIndex(curriculo => curriculo.UserId);
+
         builder.Property(curriculo => curriculo.Nome)
             .IsRequired()
             .HasMaxLength(150);

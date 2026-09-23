@@ -12,18 +12,21 @@ public class CurriculoService : ICurriculoService
 {
     private readonly ICurriculoRepository _curriculoRepository;
     private readonly IArquivoStorage _arquivoStorage;
+    private readonly ICurrentUser _currentUser;
 
     public CurriculoService(
         ICurriculoRepository curriculoRepository,
-        IArquivoStorage arquivoStorage)
+        IArquivoStorage arquivoStorage,
+        ICurrentUser currentUser)
     {
         _curriculoRepository = curriculoRepository;
         _arquivoStorage = arquivoStorage;
+        _currentUser = currentUser;
     }
 
     public async Task<PagedList<CurriculoDTO>> GetCurriculosPagedAsync(int pageNumber, int pageSize)
     {
-        var curriculos = await _curriculoRepository.GetCurriculosPagedAsync(pageNumber, pageSize);
+        var curriculos = await _curriculoRepository.GetCurriculosPagedAsync(pageNumber, pageSize, _currentUser.UserId);
         var curriculoDtos = curriculos
             .Select(curriculo => curriculo.ToCurriculoDTO()!)
             .ToList();
@@ -37,7 +40,7 @@ public class CurriculoService : ICurriculoService
 
     public async Task<CurriculoDTO?> GetByIdAsync(Guid? id)
     {
-        var curriculo = await _curriculoRepository.GetByIdAsync(id);
+        var curriculo = await _curriculoRepository.GetByIdAsync(id, _currentUser.UserId);
         return curriculo?.ToCurriculoDTO();
     }
 
@@ -56,7 +59,8 @@ public class CurriculoService : ICurriculoService
             storageKey,
             curriculo.ContentType,
             curriculo.TamanhoBytes,
-            curriculo.Versao);
+            curriculo.Versao,
+            _currentUser.UserId);
         var createdCurriculo = await _curriculoRepository.CreateAsync(curriculoEntity);
 
         return createdCurriculo.ToCurriculoDTO()!;
@@ -149,7 +153,7 @@ public class CurriculoService : ICurriculoService
         if (id == Guid.Empty)
             throw new ArgumentException("O ID do currículo é obrigatório.", nameof(id));
 
-        var curriculo = await _curriculoRepository.GetByIdAsync(id);
+        var curriculo = await _curriculoRepository.GetByIdAsync(id, _currentUser.UserId);
         return curriculo ?? throw new KeyNotFoundException("Currículo não encontrado.");
     }
 }

@@ -12,13 +12,16 @@ public class CandidaturaService : ICandidaturaService
 {
     private readonly ICandidaturaRepository _candidaturaRepository;
     private readonly ICurriculoRepository _curriculoRepository;
+    private readonly ICurrentUser _currentUser;
 
     public CandidaturaService(
         ICandidaturaRepository candidaturaRepository,
-        ICurriculoRepository curriculoRepository)
+        ICurriculoRepository curriculoRepository,
+        ICurrentUser currentUser)
     {
         _candidaturaRepository = candidaturaRepository;
         _curriculoRepository = curriculoRepository;
+        _currentUser = currentUser;
     }
 
 
@@ -28,7 +31,7 @@ public class CandidaturaService : ICandidaturaService
         ArgumentNullException.ThrowIfNull(candidatura);
         await EnsureCurriculoExistsAsync(candidatura.CurriculoId);
 
-        var candidaturaEntity = candidatura.ToCandidatura()!;
+        var candidaturaEntity = candidatura.ToCandidatura(_currentUser.UserId)!;
         var createdCandidatura = await _candidaturaRepository.CreateAsync(candidaturaEntity);
 
         return createdCandidatura.ToCandidaturaDTO()!;
@@ -36,13 +39,13 @@ public class CandidaturaService : ICandidaturaService
 
     public async Task<CandidaturaDTO?> GetByIdAsync(Guid? id)
     {
-        var candidatura = await _candidaturaRepository.GetByIdAsync(id);
+        var candidatura = await _candidaturaRepository.GetByIdAsync(id, _currentUser.UserId);
         return candidatura?.ToCandidaturaDTO();
     }
 
     public async Task<IQueryable<CandidaturaDTO>> GetCandidaturasAsync()
     {
-        var candidaturas = await _candidaturaRepository.GetCandidaturasAsync();
+        var candidaturas = await _candidaturaRepository.GetCandidaturasAsync(_currentUser.UserId);
         return candidaturas.Select(candidatura => new CandidaturaDTO
         {
             CandidaturaId = candidatura.CandidaturaId,
@@ -59,7 +62,7 @@ public class CandidaturaService : ICandidaturaService
 
     public async Task<PagedList<CandidaturaDTO>> GetCandidaturasPagedAsync(int pageNumber, int pageSize)
     {
-        var candidaturas = await _candidaturaRepository.GetCandidaturasPagedAsync(pageNumber, pageSize);
+        var candidaturas = await _candidaturaRepository.GetCandidaturasPagedAsync(pageNumber, pageSize, _currentUser.UserId);
         var candidaturaDtos = candidaturas
             .Select(candidatura => candidatura.ToCandidaturaDTO()!)
             .ToList();
@@ -103,7 +106,7 @@ public class CandidaturaService : ICandidaturaService
         if (id == Guid.Empty)
             throw new ArgumentException("O ID da candidatura é obrigatório.", nameof(id));
 
-        var candidatura = await _candidaturaRepository.GetByIdAsync(id);
+        var candidatura = await _candidaturaRepository.GetByIdAsync(id, _currentUser.UserId);
         return candidatura ?? throw new KeyNotFoundException("Candidatura não encontrada.");
     }
 
@@ -112,7 +115,7 @@ public class CandidaturaService : ICandidaturaService
         if (curriculoId == Guid.Empty)
             throw new ArgumentException("O currículo é obrigatório.", nameof(curriculoId));
 
-        if (await _curriculoRepository.GetByIdAsync(curriculoId) is null)
+        if (await _curriculoRepository.GetByIdAsync(curriculoId, _currentUser.UserId) is null)
             throw new KeyNotFoundException("Currículo não encontrado.");
     }
 }

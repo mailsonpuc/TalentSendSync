@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using TalentSendSync.CrossCutting;
 using TalentSendSync.CrossCutting.IoC;
@@ -11,21 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Api
 builder.Services.AddInfrastructureAPI(builder.Configuration);
+// jwt
 builder.Services.AddJwtConfiguration(builder.Configuration);
-builder.Services.AddRateLimiter(options =>
-{
-    options.AddFixedWindowLimiter("loginRateLimit", limiterOptions =>
-    {
-        limiterOptions.PermitLimit = 10;
-        limiterOptions.Window = TimeSpan.FromMinutes(1);
-        limiterOptions.QueueLimit = 0;
-        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-    });
-});
-
+// RateLimit
+builder.Services.AddInfrastructureRateLimiter(builder.Configuration);
 // Swagger
 builder.Services.AddInfrastructureSwagger(builder.Configuration);
-
 // CORS
 builder.Services.AddInfrastructureCors(builder.Configuration);
 

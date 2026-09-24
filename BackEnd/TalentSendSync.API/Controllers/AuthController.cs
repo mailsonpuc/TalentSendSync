@@ -80,7 +80,7 @@ public class AuthController : ControllerBase
 
 
 
-    //[EnableRateLimiting("loginRateLimit")]
+    [EnableRateLimiting("loginRateLimit")]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDTO request)
     {

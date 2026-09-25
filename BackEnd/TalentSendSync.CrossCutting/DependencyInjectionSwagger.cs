@@ -16,7 +16,7 @@ public static class DependencyInjectionSwagger
     {
         services.AddOpenApiDocument(options =>
         {
-            options.Title = "Shoop API";
+            options.Title = "API gerenciamento de candidaturas - TalentSendSync";
             options.Version = "v1";
 
             options.SchemaSettings.GenerateXmlObjects = true;

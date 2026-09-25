@@ -46,6 +46,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseMiddleware<TalentSendSync.API.Middleware.ExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
 
 

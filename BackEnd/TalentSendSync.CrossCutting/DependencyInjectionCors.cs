@@ -21,9 +21,8 @@ public static class DependencyInjectionCors
                         "https://localhost:7014",                 // back HTTPS
                         "https://pet-shoop-full-stack.vercel.app" // front produção
                     )
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
+                    .WithMethods("GET", "POST", "PUT", "DELETE")
+                    .WithHeaders("Content-Type", "Authorization");
             });
         });
 

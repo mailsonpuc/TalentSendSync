@@ -3,7 +3,7 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
-.pdf
+*.pdf
 
 # dotenv files
 .env

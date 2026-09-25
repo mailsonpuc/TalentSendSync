@@ -4,7 +4,8 @@ import { getStoredToken } from "../Contexts/useAuth";
 const api = axios.create({
     
     //azure https://apipetshoop-f8b7cpataca3fhd8.canadacentral-01.azurewebsites.net/api  
-    baseURL: "http://localhost:5079/api",
+    //http://localhost:5079/api
+    baseURL: "/api", //usa apenas api quando tiver deploy no nginx localhost
     
 });
 

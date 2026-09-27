@@ -4,6 +4,18 @@ Este projeto é uma aplicação pessoal para gerenciamento de currículos enviad
 
 A ideia central é centralizar e organizar os cadastros de currículos, acompanhar o status de cada candidatura e manter um histórico de contatos e movimentações relacionadas às vagas.
 
+
+---
+
+<img src="imgs/front.png">
+
+<br><br>
+
+---
+
+<img src="imgs/back.png">
+
+
 ## Objetivo
 
 - cadastrar currículos enviados

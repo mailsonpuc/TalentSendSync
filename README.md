@@ -15,6 +15,11 @@ A ideia central é centralizar e organizar os cadastros de currículos, acompanh
 
 <img src="imgs/back.png">
 
+---
+
+<br><br>
+
+<img src="imgs/CandidaturasDiagrama.png">
 
 ## Objetivo
 
